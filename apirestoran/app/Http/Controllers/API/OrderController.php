@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Menu;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class MenuController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $menu = Menu::with('kategori')-> get();
-        return response() -> json($menu ,200);
+        $order = Order::with('menu.kategori')->get();
+        return response()->json($order,200);
     }
 
     /**
@@ -33,16 +33,17 @@ class MenuController extends Controller
     {
         $validate = $request->validate(
         [
-        'nama' => 'required|unique:menu',
-        'kode' => 'required'
+        'nama' => 'required|unique:order',
+        'id_transaksi' => 'required',
+        'menu_id' => 'required|exists:menus,id'
         ]
         );
 
-        $menu = Menu::create($validate);
-        if($menu){
+         $order= Order::create($validate);
+        if($order){
             $data['success'] = true;
-            $data['messege'] = "Data Menu Berhasil Disimpan";
-            $data['data'] = $menu;
+            $data['messege'] = "Data Order Berhasil Disimpan";
+            $data['data'] = $order;
             return response()->json($data, 201);
         }
     }
@@ -68,28 +69,23 @@ class MenuController extends Controller
      */
     public function update(Request $request, string $id)
     {
-       $menu = Menu::find($id);
-       if($menu){ 
-
-       }
-        $validate = $request->validate(
+          $validate = $request->validate(
         [
         'nama' => 'required',
-        'kode' => 'required'
+        'id_transaksi' => 'required'
         ]
         );
-       Menu::where('id', $id)->update($validate);
-
-         if($menu){
+       Order::where('id', $id)->update($validate);
+       $order = Order::find($id);
+         if($order){
             $data['success'] = true;
-            $data['messege'] = "Data Menu Berhasil Diperbarui";
-            $data['data'] = $menu;
+            $data['messege'] = "Data Order Berhasil Diperbarui";
+            $data['data'] = $order;
             return response()->json($data, 201);
-        }
-     else {
+        }else {
             $data['success'] = false;
-            $data['messege'] = "Data Menu Tidak Ditemukan";
-        }
+            $data['messege'] = "Data Order Tidak Ditemukan";
+    }
     }
 
     /**
@@ -97,17 +93,17 @@ class MenuController extends Controller
      */
     public function destroy(string $id)
     {
-        $menu = Menu::where('id', $id);
-        if($menu){
-            $menu ->delete(); //hapus data fakultas berdasarkan id
+        $order = Order::where('id', $id);
+        if($order){
+            $order ->delete(); 
             $data['success'] = true;
-            $data['messege'] = "Data Menu Berhasil Didelete";
+            $data['messege'] = "Data Order Berhasil Didelete";
             return response()->json($data, Response::HTTP_OK);
         } else {
             $data['success'] = false;
-            $data['messege'] = "Data Menu tidak ditemukan";
+            $data['messege'] = "Data Order tidak ditemukan";
             return response()->json($data, Response::HTTP_NOT_FOUND);
         }
-    }
     
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class KategoriController extends Controller
 {
@@ -30,7 +31,20 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate(
+        [
+        'nama' => 'required|unique:menu',
+        'kode' => 'required'
+        ]
+        );
+
+        $kategori = Kategori::create($validate);
+        if($kategori){
+            $data['success'] = true;
+            $data['messege'] = "Data Kategori Berhasil Disimpan";
+            $data['data'] = $kategori;
+            return response()->json($data, 201);
+        }
     }
 
     /**
@@ -54,7 +68,27 @@ class KategoriController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+         $kategori = Kategori::find($id);
+       if($kategori){ 
+
+       }
+        $validate = $request->validate(
+        [
+        'nama' => 'required',
+        'kode' => 'required'
+        ]
+        );
+       Kategori::where('id', $id)->update($validate);
+
+         if($kategori){
+            $data['success'] = true;
+            $data['messege'] = "Data Kategori Berhasil Diperbarui";
+            $data['data'] = $kategori;
+            return response()->json($data, 201);
+        } else {
+            $data['success'] = false;
+            $data['messege'] = "Data Kategori Tidak Ditemukan";
+        }
     }
 
     /**
@@ -62,6 +96,16 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $kategori = Kategori::where('id', $id);
+        if($kategori){
+            $kategori ->delete(); //hapus data fakultas berdasarkan id
+            $data['success'] = true;
+            $data['messege'] = "Data Kategori Berhasil Didelete";
+            return response()->json($data, Response::HTTP_OK);
+        } else {
+            $data['success'] = false;
+            $data['messege'] = "Data Kategori tidak ditemukan";
+            return response()->json($data, Response::HTTP_NOT_FOUND);
+        }
     }
 }
