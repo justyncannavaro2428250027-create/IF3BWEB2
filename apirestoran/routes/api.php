@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\KategoriController;
 use App\Http\Controllers\API\MenuController;
 use App\Http\Controllers\API\OrderController;
@@ -19,3 +20,5 @@ Route::post('/order', [OrderController::class,'store']);
 Route::patch('/kategori/{id}', [KategoriController::class,'update']);
 Route::patch('/menu/{id}', [MenuController::class,'update']);
 Route::patch('/order/{id}', [OrderController::class,'update']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
