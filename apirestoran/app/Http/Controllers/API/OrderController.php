@@ -33,8 +33,9 @@ class OrderController extends Controller
     {
         $validate = $request->validate(
         [
-        'nama' => 'required|unique:order',
-        'id_transaksi' => 'required',
+        'kode_order' => 'required',
+        'payment_method' => 'required|unique:orders',
+        'total_price' => 'required',
         'menu_id' => 'required|exists:menus,id'
         ]
         );
@@ -67,27 +68,34 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-          $validate = $request->validate(
-        [
-        'nama' => 'required',
-        'id_transaksi' => 'required'
-        ]
-        );
-       Order::where('id', $id)->update($validate);
-       $order = Order::find($id);
-         if($order){
-            $data['success'] = true;
-            $data['messege'] = "Data Order Berhasil Diperbarui";
-            $data['data'] = $order;
-            return response()->json($data, 201);
-        }else {
-            $data['success'] = false;
-            $data['messege'] = "Data Order Tidak Ditemukan";
-    }
+public function update(Request $request, string $id)
+{
+    $order = Order::find($id);
+
+    if (!$order) {
+        return response()->json([
+            'success' => false,
+            'message' => "Data Order Tidak Ditemukan"
+        ], 404);
     }
 
+    // Validasi
+    $validate = $request->validate([
+        'kode_order' => 'required',
+        'payment_method' => 'required',
+        'total_price' => 'required',
+        'menu_id' => 'required|exists:menus,id'
+    ]);
+
+    // Update langsung ke model
+    $order->update($validate);
+
+    return response()->json([
+        'success' => true,
+        'message' => "Data Order Berhasil Diperbarui",
+        'data' => $order
+    ], 200);
+}
     /**
      * Remove the specified resource from storage.
      */

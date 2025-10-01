@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['id_transaksi', 'menu_id'];
-    public function order()
+    protected $fillable = ['kode_order', 'payment_method','total_price','menu_id'];
+    public function menu()
     {
-        return $this->belongsTo(Order::class, 'menu_id', 'id');
+        return $this->belongsTo(Menu::class, 'menu_id', 'id');
     }
 }

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
-           $table->id();
-           $table->string('nama', 30);
-            $table->char('id_transaksi', 5);
-            $table->foreignId('menu_id')->constrained();
+        Schema::create('menus', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama', 30);
+            $table->char('kode', 4);
+            $table->foreignId('kategori_id')->constrained();
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('menus');
     }
 };

@@ -33,8 +33,9 @@ class MenuController extends Controller
     {
         $validate = $request->validate(
         [
-        'nama' => 'required|unique:menu',
-        'kode' => 'required'
+        'nama' => 'required|unique:menus',
+        'kode' => 'required',
+        'kategori_id' => 'required|exists:kategoris,id'
         ]
         );
 
@@ -66,31 +67,34 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-       $menu = Menu::find($id);
-       if($menu){ 
+public function update(Request $request, string $id)
+{
+    $menu = Menu::find($id);
 
-       }
-        $validate = $request->validate(
-        [
-        'nama' => 'required',
-        'kode' => 'required'
-        ]
-        );
-       Menu::where('id', $id)->update($validate);
-
-         if($menu){
-            $data['success'] = true;
-            $data['messege'] = "Data Menu Berhasil Diperbarui";
-            $data['data'] = $menu;
-            return response()->json($data, 201);
-        }
-     else {
-            $data['success'] = false;
-            $data['messege'] = "Data Menu Tidak Ditemukan";
-        }
+    if (!$menu) {
+        return response()->json([
+            'success' => false,
+            'message' => "Data Menu Tidak Ditemukan"
+        ], 404);
     }
+
+    // Validasi
+    $validate = $request->validate([
+        'nama' => 'required',
+        'kode' => 'required',
+        'kategori_id' => 'required|exists:kategoris,id'
+
+    ]);
+
+    // Update langsung ke model
+    $menu->update($validate);
+
+    return response()->json([
+        'success' => true,
+        'message' => "Data Menu Berhasil Diperbarui",
+        'data' => $menu
+    ], 200);
+}
 
     /**
      * Remove the specified resource from storage.

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 50);
-            $table->char('kode', 5);
-             $table->foreignId('kategori_id')->constrained();
+            $table->char('kode_order', 4);
+            $table->string('payment_method', 30);
+            $table->integer('total_price');
+            $table->foreignId('menu_id')->constrained();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('orders');
     }
 };

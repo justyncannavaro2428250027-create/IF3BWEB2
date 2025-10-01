@@ -14,7 +14,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategori  = Kategori::all();
+        $kategori = Kategori::all();
         return response()->json($kategori, 200);
     }
 
@@ -33,8 +33,7 @@ class KategoriController extends Controller
     {
         $validate = $request->validate(
         [
-        'nama' => 'required|unique:menu',
-        'kode' => 'required'
+        'nama' => 'required|unique:kategoris',
         ]
         );
 
@@ -66,30 +65,32 @@ class KategoriController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-         $kategori = Kategori::find($id);
-       if($kategori){ 
+public function update(Request $request, string $id)
+{
+    $kategori = Kategori::find($id);
 
-       }
-        $validate = $request->validate(
-        [
-        'nama' => 'required',
-        'kode' => 'required'
-        ]
-        );
-       Kategori::where('id', $id)->update($validate);
-
-         if($kategori){
-            $data['success'] = true;
-            $data['messege'] = "Data Kategori Berhasil Diperbarui";
-            $data['data'] = $kategori;
-            return response()->json($data, 201);
-        } else {
-            $data['success'] = false;
-            $data['messege'] = "Data Kategori Tidak Ditemukan";
-        }
+    if (!$kategori) {
+        return response()->json([
+            'success' => false,
+            'message' => "Data Kategori Tidak Ditemukan"
+        ], 404);
     }
+
+    // Validasi
+    $validate = $request->validate([
+        'nama' => 'required',
+    ]);
+
+    // Update langsung ke model
+    $kategori->update($validate);
+
+    return response()->json([
+        'success' => true,
+        'message' => "Data Kategori Berhasil Diperbarui",
+        'data' => $kategori
+    ], 200);
+}
+
 
     /**
      * Remove the specified resource from storage.
