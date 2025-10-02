@@ -20,5 +20,8 @@ Route::post('/order', [OrderController::class,'store']);
 Route::patch('/kategori/{id}', [KategoriController::class,'update']);
 Route::patch('/menu/{id}', [MenuController::class,'update']);
 Route::patch('/order/{id}', [OrderController::class,'update']);
+Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']);
+Route::delete('/menu/{id}', [MenuController::class, 'destroy']);
+Route::delete('/order/{id}', [OrderController::class, 'destroy']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

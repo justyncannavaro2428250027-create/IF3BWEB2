@@ -51,9 +51,13 @@ class MenuController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'nama' => 'required|unique:menus',
+            'kode' => 'required',
+            'kategori_id' => 'required|exists:kategoris,id'
+        ]);
     }
 
     /**

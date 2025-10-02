@@ -52,9 +52,14 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+   public function show(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'kode_order' => 'required|unique:orders',
+            'payment_method' => 'required',
+            'total_price' => 'required',
+            'kategori_id' => 'required|exists:menus,id'
+        ]);
     }
 
     /**
