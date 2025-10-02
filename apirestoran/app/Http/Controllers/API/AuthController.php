@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
      public function register(Request $request){
         $validate = $request->validate([
-            'nama' => 'required',
+            'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
             'password_confirmation' => 'required|same:password'
