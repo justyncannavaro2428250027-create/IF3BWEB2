@@ -7,9 +7,6 @@ use App\Http\Controllers\API\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 Route::get('/kategori', [KategoriController::class,'index']);
 Route::get('/menu', [MenuController::class,'index']);
@@ -23,5 +20,5 @@ Route::patch('/order/{id}', [OrderController::class,'update']);
 Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']);
 Route::delete('/menu/{id}', [MenuController::class, 'destroy']);
 Route::delete('/order/{id}', [OrderController::class, 'destroy']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/register', [AuthController::class, 'register']);
+// Route::post('/login', [AuthController::class, 'login']);    
