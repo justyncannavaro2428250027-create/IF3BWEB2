@@ -49,12 +49,24 @@ class KategoriController extends Controller
     /**
      * Display the specified resource.
      */
-   public function show(Request $request)
-    {
-        $validate = $request->validate([
-            'nama' => 'required|unique:kategoris'
-        ]);
+public function show($id)
+{
+    $kategori = Kategori::with('menu')->find($id);
+
+    if ($kategori) {
+        return response()->json([
+            'success' => true,
+            'message' => 'Data kategori ditemukan',
+            'data' => $kategori
+        ], 200);
+    } else {
+        return response()->json([
+            'success' => false,
+            'message' => 'Data kategori tidak ditemukan'
+        ], 404);
     }
+}
+
 
     /**
      * Show the form for editing the specified resource.
